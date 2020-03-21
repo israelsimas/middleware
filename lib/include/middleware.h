@@ -12,19 +12,28 @@
 #ifndef _MIDDLEWARE_H_
 #define _MIDDLEWARE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**************************************************************************
  * INCLUDES
  **************************************************************************/
+#include <mosquitto.h>
 #include <standard-types.h>
 
 /**************************************************************************
  * DEFINITIONS
  **************************************************************************/
 
+#define PUB_QOS 1
+#define SUB_QOS 1
 
 /**************************************************************************
  * TYPEDEFS
  **************************************************************************/
+
+typedef	struct mosquitto* middleware_conn;
 
 
 /**************************************************************************
@@ -34,12 +43,28 @@
 /**
  * Open middleware connection.
  *
- * @param xxxx pointer to xxxxxx.
+ * @param appID pointer to Application ID.
+ * @param pchHost pointer to Host addres to connect.
+ * @param port int to port connection.
+ * @param callback pointer to callback function that receive events from mosquito.
  *
- * @return xxxxx pointer to xxxxxxx.
+ * @return conn pointer to mosquitto connection.
  */
-bool middleware_open();
+middleware_conn middleware_open(const char *appID, const char *pchHost, int port, void *callback);
 
-void middleware_close();
+int middleware_publish(middleware_conn conn, const char *pchTopic, const char *pchMsg);
+
+/**
+ * Close middleware connection.
+ *
+ * @param conn pointer to connectiob to be disconnected.
+ *
+ * @return conn pointer to mosquitto connection.
+ */
+int middleware_close(middleware_conn conn);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
