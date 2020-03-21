@@ -11,11 +11,10 @@
 #include <string.h>
 #include <middleware.h>
 #include <utils.h>
-#include <mosquitto.h>
 
 #define THIS_FILE "middleware.c"
 
-middleware_conn middleware_open(const char *appID, const char *pchHost, int port, void *callback) {
+middleware_conn middleware_open(const char *appID, const char *pchHost, int port, void (*on_message)(struct mosquitto *, void *, const struct mosquitto_message *)) {
 
   int status;
   middleware_conn mosq;
@@ -36,8 +35,8 @@ middleware_conn middleware_open(const char *appID, const char *pchHost, int port
     return NULL;
   }
 
-  if (callback) {
-    mosquitto_connect_callback_set(mosq, callback);
+  if (on_message) {
+    mosquitto_message_callback_set(mosq, on_message);
   }
 
   status = mosquitto_connect(mosq, pchHost, port, false);
@@ -58,6 +57,15 @@ int middleware_publish(middleware_conn conn, const char *pchTopic, const char *p
   }  
 
   return mosquitto_publish(conn, NULL, pchTopic, strlen(pchMsg), pchMsg, PUB_QOS, false);
+}
+
+int middleware_subscribe(middleware_conn conn, int *pchMessageID, const char *pchSubscribe) {
+
+  if (!pchSubscribe) {
+    log_error("Invalid subscribe pattern");
+  }
+
+  return mosquitto_subscribe(conn, pchMessageID, pchSubscribe, SUB_QOS);
 }
 
 int middleware_close(middleware_conn conn) {

@@ -50,14 +50,35 @@ typedef	struct mosquitto* middleware_conn;
  *
  * @return conn pointer to mosquitto connection.
  */
-middleware_conn middleware_open(const char *appID, const char *pchHost, int port, void *callback);
+middleware_conn middleware_open(const char *appID, const char *pchHost, int port, void (*on_message)(struct mosquitto *, void *, const struct mosquitto_message *));
 
+/**
+ * Publish a message on middleware.
+ *
+ * @param conn pointer to connection.
+ * @param pchTopic pointer to topic to be publish the message.
+ * @param pchMsg pointer to message.
+ *
+ * @return int status to publish.
+ */
 int middleware_publish(middleware_conn conn, const char *pchTopic, const char *pchMsg);
+
+/**
+ * Subscribe to a topic.
+ *
+ * @param conn pointer to connection.
+ * @param pchMessageID pointer to message ID.
+ * @param pchSubscribe pointer to subscription pattern.
+ *
+ * @return int status to publish.
+ */
+
+int middleware_subscribe(middleware_conn conn, int *pchMessageID, const char *pchSubscribe);
 
 /**
  * Close middleware connection.
  *
- * @param conn pointer to connectiob to be disconnected.
+ * @param conn pointer to connection to be disconnected.
  *
  * @return conn pointer to mosquitto connection.
  */
