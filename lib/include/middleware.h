@@ -1,16 +1,16 @@
 /**************************************************************************
- * iniparser.h
+ * middleware.h
  *
  *  Create on: 21/06/2019
  *
- *  Header ini parser files
+ *  Header to middleware
  *
- * Copyrights, 2019
+ * Copyrights, 2020
  *
  **************************************************************************/
 
-#ifndef _INIPARSER_H_
-#define _INIPARSER_H_
+#ifndef _MIDDLEWARE_H_
+#define _MIDDLEWARE_H_
 
 /**************************************************************************
  * INCLUDES
