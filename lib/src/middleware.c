@@ -36,7 +36,9 @@ middleware_conn middleware_open(const char *appID, const char *pchHost, int port
     return NULL;
   }
 
-  mosquitto_connect_callback_set(mosq, callback);
+  if (callback) {
+    mosquitto_connect_callback_set(mosq, callback);
+  }
 
   status = mosquitto_connect(mosq, pchHost, port, false);
   if (status) {
