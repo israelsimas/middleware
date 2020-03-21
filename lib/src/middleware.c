@@ -24,7 +24,7 @@ middleware_conn middleware_open(const char *appID, const char *pchHost, int port
     log_error("Invalid appID to connect middleware");
   }
 
-  if ((!pchHost) || (port == 0)) {
+  if ((!pchHost) || (port <= 0)) {
     log_error("Invalid host or port to connect middleware");
   }
 
