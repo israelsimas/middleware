@@ -35,10 +35,6 @@ middleware_conn middleware_open(const char *appID, const char *pchHost, int port
     return NULL;
   }
 
-  if (on_message) {
-    mosquitto_message_callback_set(mosq, on_message);
-  }
-
   status = mosquitto_connect(mosq, pchHost, port, false);
   if (status) {
     log_error("Middleware can not connect to host %s and port %d", pchHost, port);
@@ -65,7 +61,22 @@ int middleware_subscribe(middleware_conn conn, int *pchMessageID, const char *pc
     log_error("Invalid subscribe pattern");
   }
 
-  return mosquitto_subscribe(conn, pchMessageID, pchSubscribe, SUB_QOS);
+  return mosquitto_subscribe(conn, pchMessageID, pchSubscribe, 0);
+}
+
+int middleware_subscribe_callback(int (*callback)(struct mosquitto *, void *, const struct mosquitto_message *), const char *topic, const char *host, int port) {
+
+  int status;
+
+	status = mosquitto_subscribe_callback(
+			callback, NULL,
+			topic, 0,
+			host, port,
+			NULL, 60, true,
+			NULL, NULL,
+			NULL, NULL); 
+
+  return status;
 }
 
 int middleware_close(middleware_conn conn) {

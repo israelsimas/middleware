@@ -70,10 +70,21 @@ int middleware_publish(middleware_conn conn, const char *pchTopic, const char *p
  * @param pchMessageID pointer to message ID.
  * @param pchSubscribe pointer to subscription pattern.
  *
- * @return int status to publish.
+ * @return int status to subscribe.
  */
-
 int middleware_subscribe(middleware_conn conn, int *pchMessageID, const char *pchSubscribe);
+
+/**
+ * Subscribe to a topic callback.
+ *
+ * @param callback pointer to callback.
+ * @param topic pointer to topic ID.
+ * @param host pointer to host address.
+ * @param port port host.
+ *
+ * @return int status to subscribe.
+ */
+int middleware_subscribe_callback(int (*callback)(struct mosquitto *, void *, const struct mosquitto_message *), const char *topic, const char *host, int port);
 
 /**
  * Close middleware connection.
