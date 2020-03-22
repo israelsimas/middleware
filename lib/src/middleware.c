@@ -64,7 +64,7 @@ int middleware_subscribe(middleware_conn conn, int *pchMessageID, const char *pc
   return mosquitto_subscribe(conn, pchMessageID, pchSubscribe, 0);
 }
 
-int middleware_subscribe_callback(int (*callback)(struct mosquitto *, void *, const struct mosquitto_message *), const char *topic, const char *host, int port) {
+int middleware_subscribe_callback(int (*callback)(struct mosquitto *, void *, const struct mosquitto_message *), const char *topic, const char *host, int port, const char *username, const char *password) {
 
   int status;
 
@@ -72,12 +72,17 @@ int middleware_subscribe_callback(int (*callback)(struct mosquitto *, void *, co
 			callback, NULL,
 			topic, 0,
 			host, port,
-			NULL, 60, true,
-			NULL, NULL,
+			NULL, MIDDLEWARE_KEEP_ALIVE, true,
+			username, password,
 			NULL, NULL); 
 
   return status;
 }
+
+int middleware_username_pw(middleware_conn conn, const char *username, const char *password) {
+  return mosquitto_username_pw_set(conn, username, password);
+}
+
 
 int middleware_close(middleware_conn conn) {
   return mosquitto_disconnect(conn);

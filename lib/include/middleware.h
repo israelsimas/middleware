@@ -29,6 +29,8 @@ extern "C" {
 #define PUB_QOS 1
 #define SUB_QOS 1
 
+#define MIDDLEWARE_KEEP_ALIVE 60
+
 /**************************************************************************
  * TYPEDEFS
  **************************************************************************/
@@ -81,10 +83,23 @@ int middleware_subscribe(middleware_conn conn, int *pchMessageID, const char *pc
  * @param topic pointer to topic ID.
  * @param host pointer to host address.
  * @param port port host.
+ * @param username pointer to username to connect.
+ * @param password pointer to password to connect.
  *
  * @return int status to subscribe.
  */
-int middleware_subscribe_callback(int (*callback)(struct mosquitto *, void *, const struct mosquitto_message *), const char *topic, const char *host, int port);
+int middleware_subscribe_callback(int (*callback)(struct mosquitto *, void *, const struct mosquitto_message *), const char *topic, const char *host, int port, const char *username, const char *password);
+
+/**
+ * Subscribe to a topic callback.
+ *
+ * @param conn pointer to connection.
+ * @param username pointer to username to connect.
+ * @param password pointer to password to connect.
+ *
+ * @return int status.
+ */
+int middleware_username_pw(middleware_conn conn, const char *username, const char *password);
 
 /**
  * Close middleware connection.
