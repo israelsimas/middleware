@@ -15,7 +15,7 @@ file(GLOB headers "lib/include/*.h" )
 file(GLOB sources "lib/src/*.c" )
 
 add_library(middleware SHARED ${sources} ${headers})
-target_link_libraries(middleware utils)  
+target_link_libraries(middleware utils mosquitto)  
 
 set (VERSION 1.0.0)
 add_definitions (-DCMAKE -DVERSION=\"${VERSION}\")
